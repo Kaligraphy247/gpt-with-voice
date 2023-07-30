@@ -5,6 +5,7 @@ import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { Headphones } from "lucide-react";
 
 export default async function Chat({ params }: { params: { id: string } }) {
+  await new Promise((resolve) => setTimeout(resolve, 4_000));
   const id = params.id;
   return (
     <div className="h mb-0 space-y-10 px-1">
