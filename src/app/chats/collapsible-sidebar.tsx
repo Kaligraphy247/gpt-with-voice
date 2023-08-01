@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/app/components/ui/button";
-import { ChevronRightSquare } from "lucide-react";
+import { ChevronLeftSquare } from "lucide-react";
 import {
   Sheet,
   SheetClose,
@@ -18,7 +18,7 @@ export default function CollapsibleSidebar() {
       <SheetTrigger asChild>
         <div className="z-50 fixed right-0 mx-2 mt-10">
           <Button variant="outline" className="rounded-lg">
-            <ChevronRightSquare size={16} />
+            <ChevronLeftSquare size={16} />
           </Button>
         </div>
       </SheetTrigger>
@@ -45,7 +45,7 @@ export default function CollapsibleSidebar() {
         <SheetFooter>
           <SheetClose asChild>
             <div className="border mx-auto">
-            <Button type="button">Close</Button>
+            <Button type="button">Dismiss</Button>
             </div>
           </SheetClose>
         </SheetFooter>
