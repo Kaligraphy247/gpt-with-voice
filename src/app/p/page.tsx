@@ -14,12 +14,12 @@ export default function Chat({ params }: { params: { id: string } }) {
   const { toast } = useToast();
   const id = params.id;
   const [message, setMessage] = useState("");
+  const [messagesList, setMessagesList] = useState<Array<{ prompt: string; reply: string }>>([]);
   const [audioUrl, setAudioUrl] = useState<string | undefined>();
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   const [sendButtonLoading, setSendButtonLoading] = useState(
     <DefaultSendButton />,
   );
-
 
 
   const handleSubmit = async (e: any) => {
@@ -81,6 +81,7 @@ export default function Chat({ params }: { params: { id: string } }) {
       };
       fileReader.readAsDataURL(audioBlob);
 
+      // reset input
       e.target.userPrompt.value = "";
       setSendButtonLoading(<DefaultSendButton />); // set loading state back to default
     } else {
@@ -93,18 +94,41 @@ export default function Chat({ params }: { params: { id: string } }) {
     }
   };
 
+  const handleSubmitV2 = async (e: any) => {
+    
+  }
   const pushToChat = async (e: any) => {
     e.preventDefault();
     // console.log(e.target.userPrompt.value);
-    messages.push({
+    const newMessage = {
       prompt: e.target.userPrompt.value,
       reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?",
-    })
-
-    // localStorage
-    localStorage.setItem("test", JSON.stringify(messages, null, 2))
-    console.log(messages)
+    }
+    // update the state (an array of messages)
+    setMessagesList((prevMessagesList) => [
+      ...prevMessagesList, newMessage],
+    )
+    // console.log(messagesList)
   }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.metaKey && e.key === "Enter" || e.ctrlKey && e.key === "Enter") {
+      e.preventDefault();
+      console.log(e.currentTarget.value);
+      // const form = e.currentTarget.value;
+      // pushToChat(form)  
+      const newMessage = {
+        prompt: e.currentTarget.value,
+        reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?",
+      }
+
+      // update the state (an array of messages)
+      setMessagesList((prevMessagesList) => [
+        ...prevMessagesList, newMessage],
+      )
+    }
+  };
+
 
   return (
     <div className="mb-0 space-y-10 px-1">
@@ -114,14 +138,14 @@ export default function Chat({ params }: { params: { id: string } }) {
       </div>
       {/* REPLY */}
       <div className="border h-4/5 p-0 min-h-[65vh] rounded-sm mt-8">
-        {messages.length > 1 ? (
+        {messagesList.length > 0 ? (
           <div className="grid w-full gap-1.5 mb-0">
             <div className="relative w-full">
               <ul className="border-0 space-y-16 p-4 rounded-sm pb-20 selection:bg-blue-600 selection:text-white dark:selection:bg-blue-700">
-                {messages.map((message, index) => (
+                {messagesList.map((message, index) => (
                   <li className="w-full" key={index}>
                     <p className="mb-2 ml-0.5 overflow-auto opacity-75 pl-2 py-1 rounded bg-neutral-100 dark:bg-neutral-900">{message.prompt}</p>
-                    <div className="w-full border rounded-lg p-2 min-h-[64px] shadow-md shadow-accent dark:shadow dark:shadow-neutral-900 text-[0.95rem]">{message.reply}</div>
+                    <div className="w-full border rounded-lg p-2 min-h-[64px] shadow-lg shadow-accent dark:shadow dark:shadow-neutral-900 text-[0.95rem]">{message.reply}</div>
                   </li>
                 ))}
               </ul>
@@ -146,8 +170,7 @@ export default function Chat({ params }: { params: { id: string } }) {
               )}
             </div>
           </div>
-        ): (<>Empty</>)}
-
+        ) : (<></>)}
       </div>
       {/* PROMPT */}
       <div className="border-0 h-1/5 p-0">
@@ -161,6 +184,7 @@ export default function Chat({ params }: { params: { id: string } }) {
             placeholder="Ask your question here."
             rows={8}
             name="userPrompt"
+            onKeyDown={handleKeyDown}
           />
           {sendButtonLoading}
         </form>
@@ -194,56 +218,84 @@ const LoadingSendButton = () => {
 
 
 
-const messages = [
-  {
-    prompt: "message one prompt will be displayed here",
-    reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
-  },
-  {
-    prompt: "message two prompt will be displayed here",
-    reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? "
-  },
-  {
-    prompt: "message three prompt will be displayed here",
-    reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
-  },
-  {
-    prompt: "message four prompt will be displayed here",
-    reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
-  },
-  {
-    prompt: "message five prompt will be displayed here",
-    reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
-  },
-  {
-    prompt: "message six prompt will be displayed here",
-    reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
-  },
-  {
-    prompt: "message seven prompt will be displayed here",
-    reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? repellendus minima maiores molestias?"
-  },
-  {
-    prompt: "message eight prompt will be displayed here",
-    reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
-  },
-  {
-    prompt: "message nine prompt will be displayed here",
-    reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, iLorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? nventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
-  },
-  {
-    prompt: "message ten prompt will be displayed here",
-    reply: "Lorem ipsum dolor sit,  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
-  }
-]
+// const messages: Array<{ prompt: string; reply: string; }> = [
+//   {
+//     prompt: "message one prompt will be displayed here",
+//     reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
+//   },
+//   {
+//     prompt: "message two prompt will be displayed here",
+//     reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? "
+//   },
+//   {
+//     prompt: "message three prompt will be displayed here",
+//     reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
+//   },
+//   {
+//     prompt: "message four prompt will be displayed here",
+//     reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
+//   },
+//   {
+//     prompt: "message five prompt will be displayed here",
+//     reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
+//   },
+//   {
+//     prompt: "message six prompt will be displayed here",
+//     reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
+//   },
+//   {
+//     prompt: "message seven prompt will be displayed here",
+//     reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? repellendus minima maiores molestias?"
+//   },
+//   {
+//     prompt: "message eight prompt will be displayed here",
+//     reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
+//   },
+//   {
+//     prompt: "message nine prompt will be displayed here",
+//     reply: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, iLorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? nventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
+//   },
+//   {
+//     prompt: "message ten prompt will be displayed here",
+//     reply: "Lorem ipsum dolor sit,  Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias? amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?"
+//   }
+// ]
 
-// const messages: any = []
+// const messages: Array<{ prompt: string; reply: string; }> = []
 
 
-{/* <li className="w-full">
-  <p className="mb-2 ml-0.5 overflow-auto opacity-80">message one prompt will be displayed here</p>
-  <div className="w-full border rounded-lg p-2 min-h-[64px] shadow-md shadow-accent dark:shadow dark:shadow-neutral-900 text-[0.95rem] hover:cursor-grab">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?</div>
-</li> */}
+
+{/* <div className="grid w-full gap-1.5 mb-0">
+<div className="relative w-full">
+  <ul className="border-0 space-y-16 p-4 rounded-sm pb-20 selection:bg-blue-600 selection:text-white dark:selection:bg-blue-700">
+    {messages.map((message, index) => (
+      <li className="w-full" key={index}>
+        <p className="mb-2 ml-0.5 overflow-auto opacity-75 pl-2 py-1 rounded bg-neutral-100 dark:bg-neutral-900">{message.prompt}</p>
+        <div className="w-full border rounded-lg p-2 min-h-[64px] shadow-md shadow-accent dark:shadow dark:shadow-neutral-900 text-[0.95rem]">{message.reply}</div>
+      </li>
+    ))}
+  </ul>
+   // TODO AUDIO IS LOADED 
+  {!isAudioLoading ? (
+    <div className="absolute bottom-2 right-2 px-2 pt-3">
+      <audio
+        controls
+        controlsList="nodownload"
+        key={audioUrl}
+        autoPlay
+      >
+        <source src={audioUrl} />
+      </audio>
+    </div>
+  ) : (
+    <div className="absolute bottom-2 right-2 px-2 pt-3">
+      <div className="border rounded-lg px-10 py-2 animate-pulse">
+        <Play />
+      </div>
+    </div>
+  )}
+</div>
+</div> */}
 
 
 
