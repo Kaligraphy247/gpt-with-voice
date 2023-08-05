@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 // import { Button } from "./ui/button";
-import React from "react"
-import Link from "next/link"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { useRouter } from "next/navigation"
-import { useToast } from "./ui/use-toast"
+import React from "react";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useRouter } from "next/navigation";
+import { useToast } from "./ui/use-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,15 +13,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
+} from "./ui/dropdown-menu";
 
 export default function UserProfileComponent({
   loginState,
 }: {
-  loginState: boolean
+  loginState: boolean;
 }) {
-  const router = useRouter()
-  const { toast } = useToast()
+  const router = useRouter();
+  const { toast } = useToast();
 
   /**
    * Logs out the user by making a request to the "/api/logout" endpoint.
@@ -29,18 +29,18 @@ export default function UserProfileComponent({
    * @return {Promise<void>} Promise that resolves when the logout process is complete.
    */
   const logout = async (): Promise<void> => {
-    await fetch("/api/logout")
+    await fetch("/api/logout");
 
     //? client side redirection to home page & manually refreshing
     setTimeout(() => {
-      router.push("/")
-      router.refresh()
-    }, 1500)
+      router.push("/");
+      router.refresh();
+    }, 1500);
 
     toast({
       title: "Bye, come back soon!",
-    })
-  }
+    });
+  };
 
   /**
    * Attempts to log the user in by redirecting to the login page.
@@ -48,8 +48,8 @@ export default function UserProfileComponent({
    * @return {void} No return value.
    */
   const login = (): void => {
-    router.push("/login")
-  }
+    router.push("/login");
+  };
 
   return (
     <DropdownMenu>
@@ -83,5 +83,5 @@ export default function UserProfileComponent({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

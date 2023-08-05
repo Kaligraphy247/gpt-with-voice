@@ -25,9 +25,7 @@ export default function CollapsibleSidebar() {
       <SheetContent side={"left"}>
         <SheetHeader>
           <SheetTitle>Select a chat</SheetTitle>
-          <SheetDescription>
-            Select a chat to continue.
-          </SheetDescription>
+          <SheetDescription>Select a chat to continue.</SheetDescription>
         </SheetHeader>
         <div className="border-0 overflow-y-auto">
           <ul className="w-full space-y-4 py-4">
@@ -45,7 +43,7 @@ export default function CollapsibleSidebar() {
         <SheetFooter>
           <SheetClose asChild>
             <div className="border mx-auto">
-            <Button type="button">Dismiss</Button>
+              <Button type="button">Dismiss</Button>
             </div>
           </SheetClose>
         </SheetFooter>

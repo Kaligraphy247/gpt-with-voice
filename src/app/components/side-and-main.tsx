@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 type SidebarProps = {
   // Define props for the sidebar here
@@ -18,11 +18,12 @@ type MainContentProps = {
 //   );
 // };
 
-
 export function Sidebar() {
   return (
-    <div className="hidden md:w-3/5 md:flex 2xl:w-1/4 xl:w-1/3 bg-gray-950 border mr-6 px-2 py-1 rounded h-screen">sidebar</div>
-  )
+    <div className="hidden md:w-3/5 md:flex 2xl:w-1/4 xl:w-1/3 bg-gray-950 border mr-6 px-2 py-1 rounded h-screen">
+      sidebar
+    </div>
+  );
 }
 
 const MainContent: React.FC<MainContentProps> = (props) => {
