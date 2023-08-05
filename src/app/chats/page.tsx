@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import CollapsibleSidebar from "./collapsible-sidebar";
 
 export default async function Chats() {

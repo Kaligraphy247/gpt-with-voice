@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={openSans.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AppBar />
-          <main className="mx-4 md:mx-24 lg:mx-36 xl:mx-52 mb-4">{children}</main>
+          <main className="mx-4 md:mx-32 lg:mx-48 xl:mx-80 mb-4">{children}</main>
           <Toaster />
         </ThemeProvider>
       </body>
