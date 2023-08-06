@@ -2,7 +2,7 @@ import Link from "next/link";
 // import SidebarAndMainContent from "./components/side-and-main";
 
 export default async function Home() {
-  await new Promise((resolve) => setTimeout(resolve, 4_000));
+  // await new Promise((resolve) => setTimeout(resolve, 4_000));
   // const value = Math.random();
   return (
     // <main className="flex min-h-screen flex-col items-center justify-between p-24">
