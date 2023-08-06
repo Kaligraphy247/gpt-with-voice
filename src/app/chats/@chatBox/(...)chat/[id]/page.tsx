@@ -19,9 +19,7 @@ export default function Chat({ params }: { params: { id: string } }) {
   const { toast } = useToast();
   const id = params.id;
   const [message, setMessage] = useState("");
-  const [messagesList, setMessagesList] = useState<
-    Array<{ prompt: string; reply: string }>
-  >([]);
+  const [messagesList, setMessagesList] = useState<Array<{ prompt: string; reply: string }>>([]);
   const [audioUrl, setAudioUrl] = useState<string | undefined>();
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   const [sendButtonLoading, setSendButtonLoading] = useState(
@@ -269,7 +267,7 @@ export default function Chat({ params }: { params: { id: string } }) {
           </div>
         ) : (
           <>
-            <div className="flex h-screen justify-center items-center">
+            <div className="flex h-[65vh] justify-center items-center">
               <div className="border justify-center items-center flex p-4 rounded-lg border-dashed border-gray-300 text-gray-600 dark:border-gray-500 text-center dark:text-gray-300">
                 No chat's yet 🤷
               </div>
