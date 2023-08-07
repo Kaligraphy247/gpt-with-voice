@@ -28,85 +28,13 @@ export default function Chat({ params }: { params: { id: string } }) {
     <DefaultSendButton />,
   );
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    // ! set isAudioLoading to true
-    setIsAudioLoading(true);
-    const form = new FormData();
-    let user_prompt = e.target.userPrompt.value;
-    console.log(user_prompt);
-    form.append("user_content", user_prompt);
-    const response = await fetch("http://localhost:8000/full", {
-      method: "POST",
-      body: form,
-    });
-    const result = await response.json();
-    console.log(result); //! DEBUG
-    if (result) {
-      setMessage(result.message.content);
-      setAudioUrl(result.audio);
-      setIsAudioLoading(false);
-      // ! clear input after successful submission
-      e.target.userPrompt.value = "";
-    } else {
-      toast({
-        title: "Error",
-        variant: "destructive",
-        description: "Something went wrong. please try again.",
-        duration: 5000,
-      });
-    }
-  };
-
-  const handleSubmitObfuscated = async (e: any) => {
-    e.preventDefault();
-    setIsAudioLoading(true);
-    setSendButtonLoading(<LoadingSendButton />); // set send button to loading state
-    const form = new FormData();
-    let user_prompt = e.target.userPrompt.value;
-    console.log(user_prompt);
-    form.append("user_content", user_prompt);
-    const response = await fetch("http://localhost:8000/full", {
-      method: "POST",
-      body: form,
-    });
-    const result = await response.json();
-    console.log(result);
-    if (result) {
-      setMessage(result.message.content);
-      // Convert audioUrl to data URI
-      const audioResponse = await fetch(result.audio);
-      const audioBlob = await audioResponse.blob();
-      const fileReader = new FileReader();
-      fileReader.onload = function (event) {
-        const dataURI = event.target!.result;
-        if (typeof dataURI === "string") {
-          setAudioUrl(dataURI);
-        }
-        setIsAudioLoading(false);
-      };
-      fileReader.readAsDataURL(audioBlob);
-
-      // reset input
-      e.target.userPrompt.value = "";
-      setSendButtonLoading(<DefaultSendButton />); // set loading state back to default
-    } else {
-      toast({
-        title: "Error",
-        variant: "destructive",
-        description: "Something went wrong. please try again.",
-        duration: 5000,
-      });
-    }
-  };
-
   /**
    * Handles the submission of the form.
    *
    * @param {string} prompt - The prompt from the user.
    * @return {Promise<void>} - A promise that resolves when the submission is complete.
    */
-  const handleSubmitV2 = async (prompt: string) => {
+  const handleSubmit = async (prompt: string) => {
     // e.preventDefault();
     setIsAudioLoading(true);
     setSendButtonLoading(<LoadingSendButton />); // set send button to loading state
@@ -114,79 +42,72 @@ export default function Chat({ params }: { params: { id: string } }) {
     let user_prompt = prompt;
     console.log(user_prompt); //! DEBUG
     form.append("user_content", user_prompt);
-    const response = await fetch("http://localhost:8000/full", {
-      method: "POST",
-      body: form,
-    });
-    const result = await response.json();
-    console.log(result);
-    if (result) {
-      // setMessagesList(result.message.content);
-      const newMessage = {
-        prompt: prompt,
-        reply: result.message.content,
-      };
+    try {
+      const response = await fetch("http://localhost:8000/full", {
+        method: "POST",
+        body: form,
+      });
 
-      // Convert audioUrl to data URI
-      const audioResponse = await fetch(result.audio);
-      const audioBlob = await audioResponse.blob();
-      const fileReader = new FileReader();
-      fileReader.onload = function (event) {
-        const dataURI = event.target!.result;
-        if (typeof dataURI === "string") {
-          setAudioUrl(dataURI);
-        }
-        setIsAudioLoading(false);
-      };
-      fileReader.readAsDataURL(audioBlob);
+      const result = await response.json();
+      console.log(result); //! DEBUG
+      if (result) {
+        const newMessage = {
+          prompt: prompt,
+          reply: result.message.content,
+        };
 
-      // update the state (an array of messages)
-      setMessagesList((prevMessagesList) => [...prevMessagesList, newMessage]);
-      // todo upload message to chat history db
+        // Convert audioUrl to data URI
+        const audioResponse = await fetch(result.audio);
+        const audioBlob = await audioResponse.blob();
+        const fileReader = new FileReader();
+        fileReader.onload = function (event) {
+          const dataURI = event.target!.result;
+          if (typeof dataURI === "string") {
+            setAudioUrl(dataURI);
+          }
+          setIsAudioLoading(false);
+        };
+        fileReader.readAsDataURL(audioBlob);
 
-      // // reset input
-      // e.target.userPrompt.value = "";
-      // set loading state back to default
-      setSendButtonLoading(<DefaultSendButton />);
-    } else {
+        // update the state (an array of messages)
+        setMessagesList((prevMessagesList) => [
+          ...prevMessagesList,
+          newMessage,
+        ]);
+        // todo upload message to chat history db
+
+        // set loading state back to default
+        setSendButtonLoading(<DefaultSendButton />);
+      } else {
+        toast({
+          title: "Error",
+          variant: "destructive",
+          description: "Something went wrong. please try again.",
+          duration: 5000,
+        });
+      }
+    } catch (e) {
       toast({
-        title: "Error",
+        title: "Request failed",
         variant: "destructive",
-        description: "Something went wrong. please try again.",
+        description: `Something went wrong. please try again. \n${String(e)}`,
         duration: 5000,
       });
     }
   };
 
-  const pushToChat = async (e: any) => {
-    e.preventDefault();
-    // console.log(e.target.userPrompt.value);
-    const newMessage = {
-      prompt: e.target.userPrompt.value,
-      reply:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam rem qui molestias, mollitia possimus error veniam eveniet, inventore, quod quisquam officiis. Sunt et pariatur cupiditate modi repellendus minima maiores molestias?",
-    };
-    // update the state (an array of messages)
-    setMessagesList((prevMessagesList) => [...prevMessagesList, newMessage]);
-    // console.log(messagesList)
-  };
-
   /**
-   * Handles the key down event on the textarea and provides value to be used for `handleSubmitV2`.
+   * Handles the key down event on the textarea and provides value to be used for `handleSubmit`.
    *
    * @param {React.KeyboardEvent<HTMLTextAreaElement>} e - The keyboard event object.
    */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (
-      (e.metaKey && e.key === "Enter") ||
-      (e.ctrlKey && e.key === "Enter") ||
-      e.type === "submit"
-    ) {
+    if ((e.metaKey && e.key === "Enter") || (e.ctrlKey && e.key === "Enter")) {
       e.preventDefault();
       const prompt = e.currentTarget.value;
       console.log("Prompt: ", prompt); //! DEBUG
       if (prompt !== "") {
-        handleSubmitV2(prompt);
+        handleSubmit(prompt);
       } else {
         toast({
           title: "Prompt cannot be empty",
@@ -210,7 +131,7 @@ export default function Chat({ params }: { params: { id: string } }) {
     const prompt = (e.target as HTMLFormElement).userPrompt.value;
     console.log("Prompt: ", prompt); //! DEBUG
     if (prompt !== "") {
-      handleSubmitV2(prompt);
+      handleSubmit(prompt);
       // console.log("Not empty") //! DEBUG
     } else {
       toast({

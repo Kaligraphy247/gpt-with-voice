@@ -1,9 +1,10 @@
 {
     "cSpell.words": [
+        "Aplayer",
         "clsx",
         "Codeium",
         "lucide",
-        "nodownload"
+        "nodownload",
     ],
     "[javascript]": {
         "editor.maxTokenizationLineLength": 2500,
