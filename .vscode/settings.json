@@ -5,6 +5,7 @@
         "Codeium",
         "lucide",
         "nodownload",
+        "openai"
     ],
     "[javascript]": {
         "editor.maxTokenizationLineLength": 2500,
