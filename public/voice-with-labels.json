@@ -1,0 +1,94 @@
+[
+    {
+        "label": "en-GB-News-K",
+        "value": "audio/en-GB-News-K.mp3"
+    },
+    {
+        "label": "en-GB-News-J",
+        "value": "audio/en-GB-News-J.mp3"
+    },
+    {
+        "label": "en-GB-News-L",
+        "value": "audio/en-GB-News-L.mp3"
+    },
+    {
+        "label": "en-GB-News-H",
+        "value": "audio/en-GB-News-H.mp3"
+    },
+    {
+        "label": "en-GB-Neural2-A",
+        "value": "audio/en-GB-Neural2-A.mp3"
+    },
+    {
+        "label": "en-GB-Neural2-B",
+        "value": "audio/en-GB-Neural2-B.mp3"
+    },
+    {
+        "label": "en-GB-Neural2-D",
+        "value": "audio/en-GB-Neural2-D.mp3"
+    },
+    {
+        "label": "en-GB-Neural2-F",
+        "value": "audio/en-GB-Neural2-F.mp3"
+    },
+    {
+        "label": "en-GB-Wavenet-A",
+        "value": "audio/en-GB-Wavenet-A.mp3"
+    },
+    {
+        "label": "en-GB-Wavenet-B",
+        "value": "audio/en-GB-Wavenet-B.mp3"
+    },
+    {
+        "label": "en-US-Neural2-A",
+        "value": "audio/en-US-Neural2-A.mp3"
+    },
+    {
+        "label": "en-US-Neural2-C",
+        "value": "audio/en-US-Neural2-C.mp3"
+    },
+    {
+        "label": "en-US-Neural2-E",
+        "value": "audio/en-US-Neural2-E.mp3"
+    },
+    {
+        "label": "en-US-Neural2-F",
+        "value": "audio/en-US-Neural2-F.mp3"
+    },
+    {
+        "label": "en-US-Neural2-G",
+        "value": "audio/en-US-Neural2-G.mp3"
+    },
+    {
+        "label": "en-US-Neural2-I",
+        "value": "audio/en-US-Neural2-I.mp3"
+    },
+    {
+        "label": "en-US-Neural2-J",
+        "value": "audio/en-US-Neural2-J.mp3"
+    },
+    {
+        "label": "en-US-Polyglot-1",
+        "value": "audio/en-US-Polyglot-1.mp3"
+    },
+    {
+        "label": "en-US-Studio-M",
+        "value": "audio/en-US-Studio-M.mp3"
+    },
+    {
+        "label": "en-US-Studio-O",
+        "value": "audio/en-US-Studio-O.mp3"
+    },
+    {
+        "label": "de-DE-Wavenet-E",
+        "value": "audio/de-DE-Wavenet-E.mp3"
+    },
+    {
+        "label": "de-DE-Wavenet-F",
+        "value": "audio/de-DE-Wavenet-F.mp3"
+    },
+    {
+        "label": "de-DE-Polyglot-1",
+        "value": "audio/de-DE-Polyglot-1.mp3"
+    }
+]

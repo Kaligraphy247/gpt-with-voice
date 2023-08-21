@@ -8,6 +8,9 @@ import { Headphones, Play } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/app/components/ui/use-toast";
 
+const APIEndpoint = process.env['API_ENDPOINT_ENV'] === "DEV" ? "http://localhost:8000/full" : "/full"
+console.log(APIEndpoint) //! DEBUG
+
 /**
  * Renders a chat component.
  *
@@ -40,8 +43,10 @@ export default function Chat({ params }: { params: { id: string } }) {
     setSendButtonLoading(<LoadingSendButton />); // set send button to loading state
     const form = new FormData();
     let user_prompt = prompt;
+    let voice_choice = "en-US-Studio-O"
     console.log(user_prompt); //! DEBUG
     form.append("user_content", user_prompt);
+    form.append("voice_choice", voice_choice);
     try {
       const response = await fetch("http://localhost:8000/full", {
         method: "POST",

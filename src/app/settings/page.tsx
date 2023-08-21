@@ -1,5 +1,6 @@
 "use client";
 
+import voiceOpt from "../../../public/voice-with-labels.json"
 import { useToast } from "../components/ui/use-toast";
 import { useState } from "react";
 import { Button } from "@/app/components/ui/button";
@@ -145,7 +146,7 @@ function SetVoices() {
           <SelectValue placeholder="Select a voice to use" />
         </SelectTrigger>
         <SelectContent>
-          {audioSrc.map((audio, index) => (
+          {voiceOpt.map((audio, index) => (
             <SelectItem key={index} value={audio.value}>
               {audio.label}
             </SelectItem>
@@ -176,19 +177,3 @@ function SetVoices() {
     </div>
   );
 }
-
-// TODO Remove me
-const audioSrc = [
-  {
-    label: "Male 01",
-    value: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-  },
-  {
-    label: "Female 03",
-    value: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-  },
-  {
-    label: "Neutral 04",
-    value: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-  },
-];

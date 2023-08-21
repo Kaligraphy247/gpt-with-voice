@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Settings",
-  description: "Do your settings stuff here 👀",
+  description: "Do your settings and stuff here 👀",
 };
 
 export default function SettingsLayout({

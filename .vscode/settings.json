@@ -5,7 +5,8 @@
         "Codeium",
         "lucide",
         "nodownload",
-        "openai"
+        "openai",
+        "Wavenet"
     ],
     "[javascript]": {
         "editor.maxTokenizationLineLength": 2500,
