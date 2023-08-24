@@ -1,6 +1,6 @@
 "use client";
 
-import voiceOpt from "../../../public/voice-with-labels.json"
+import voiceOpt from "../../../public/voice-with-labels.json";
 import { useToast } from "../components/ui/use-toast";
 import { useState } from "react";
 import { Button } from "@/app/components/ui/button";

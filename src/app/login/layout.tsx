@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Settings",
-  description: "Do your settings and stuff here 👀",
+  title: "Login",
+  description: "Login to continue",
 };
 
-export default function SettingsLayout({
+export default function LoginLayout({
   children,
 }: {
   children: React.ReactNode;
