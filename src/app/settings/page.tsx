@@ -55,14 +55,14 @@ export default function Settings() {
               <SetVoices />
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value="billing">
+          {/* <AccordionItem value="billing">
             <AccordionTrigger>
               <Label className="text-xl">Billing</Label>
             </AccordionTrigger>
             <AccordionContent>
               <p className="text-2xl">🚧 🚧 Coming Soon 🚧 🚧</p>
             </AccordionContent>
-          </AccordionItem>
+          </AccordionItem> */}
         </Accordion>
       </div>
     </div>
@@ -145,7 +145,7 @@ function SetVoices() {
         <SelectTrigger className="w-[360px]">
           <SelectValue placeholder="Select a voice to use" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="h-[60dvh]" side="top">
           {voiceOpt.map((audio, index) => (
             <SelectItem key={index} value={audio.value}>
               {audio.label}
@@ -164,7 +164,7 @@ function SetVoices() {
       </audio>
       <div>
         <Button
-          className="w-16"
+          className="w-20 h-12 mt-1"
           onClick={() => {
             toast({
               title: "Saved!",

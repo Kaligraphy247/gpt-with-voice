@@ -98,7 +98,7 @@ export default function OTPComponent(props: { email: string }) {
       if (result.ok) {
         toast({
           title: "Authentication Successful",
-          description: "You have successfully logged in.",
+          description: "Welcome 🎉",
         });
 
         // redirect to home page

@@ -200,7 +200,7 @@ export default function Chat({ params }: { params: { id: string } }) {
           <>
             <div className="flex h-[65vh] justify-center items-center">
               <div className="border justify-center items-center flex p-4 rounded-lg border-dashed border-gray-300 text-gray-600 dark:border-gray-500 text-center dark:text-gray-300">
-                No chat's yet 🤷
+                {"No chat's yet 🤷"}
               </div>
             </div>
           </>
