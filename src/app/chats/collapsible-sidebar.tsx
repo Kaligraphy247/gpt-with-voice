@@ -32,9 +32,9 @@ export default function CollapsibleSidebar() {
             <li className="w-full border p-2 rounded-md">
               <Link href={"/chat/42"}>content 42</Link>
             </li>
-            <li className="w-full border p-2 rounded-md">
+            {/* <li className="w-full border p-2 rounded-md">
               <Link href={"/chat/69"}>content 69</Link>
-            </li>
+            </li> */}
             <li className="w-full border p-2 rounded-md">
               <Link href={"/chat/another"}>content another</Link>
             </li>

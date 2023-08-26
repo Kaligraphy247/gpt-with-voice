@@ -7,10 +7,16 @@ import { Input } from "./ui/input";
 import { useToast } from "./ui/use-toast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
+import { json } from "stream/consumers";
+
+const baseApiUrl = process.env["NEXT_PUBLIC_API_URL"];
 
 export default function OTPComponent(props: { email: string }) {
   // destructure email from props
   const { email } = props;
+  const { ...data } = useContext(UserContext);
   const { toast } = useToast();
   const router = useRouter();
   const [isAuthCodeEmpty, setIsAuthCodeEmpty] = useState<boolean>(true);
@@ -56,7 +62,7 @@ export default function OTPComponent(props: { email: string }) {
   async function resendAuthenticationCode() {
     const form = new FormData();
     form.append("email_address", email);
-    const result = await fetch("http://localhost:8000/auth-by-email", {
+    const result = await fetch(`${baseApiUrl}/auth-by-email`, {
       method: "POST",
       body: form,
     });
@@ -81,45 +87,61 @@ export default function OTPComponent(props: { email: string }) {
       e.target.six.value;
     console.log(code); //! DEBUG
 
-    if (code.length === 6) {
+    const codeComplete = code.length === 6 ? true : false;
+    if (codeComplete) {
       console.log("proceed to auth"); //! DEBUG
       const form = new FormData();
       // append form data
       form.append("auth_code", code);
       form.append("email_address", email);
       // send request
-      const result = await fetch("http://localhost:8000/confirm-auth-code", {
-        method: "POST",
-        body: form,
-        credentials: "include",
-      });
-      console.log(result); //! DEBUG
-
-      if (result.ok) {
-        toast({
-          title: "Authentication Successful",
-          description: "Welcome 🎉",
+      try {
+        const result = await fetch(`${baseApiUrl}/confirm-auth-code`, {
+          method: "POST",
+          body: form,
+          credentials: "include",
         });
 
-        // redirect to home page
-        setTimeout(() => {
-          router.push("/");
-        }, 1500);
-      } else {
+        const response = await result.json();
+        console.log(response);
+
+        if (response["access_token"]) {
+          toast({
+            title: "Authentication Successful",
+            description: "Welcome 🎉",
+          });
+          // ! update context
+          data.setUser({
+            email: email,
+            token: response["access_token"],
+            voicePreference: response["preferredVoice"],
+          });
+          // !
+          // redirect to home page
+          setTimeout(() => {
+            router.push("/");
+            router.refresh();
+          }, 2000);
+        } else {
+          toast({
+            title: "Authentication failed",
+            variant: "destructive",
+            description: "Authentication code is invalid or expired.",
+          });
+        }
+        // catch block
+      } catch (e) {
         toast({
-          title: "Authentication failed",
+          title: "Request failed",
           variant: "destructive",
-          description: "Authentication code is invalid or expired.",
+          description: `Something went wrong. please try again. \n${String(e)}`,
         });
+        console.error("Error", e);
       }
-    } else if (code.length < 6) {
-      toast({
-        title: "Incomplete Authentication code",
-        variant: "destructive",
-      });
     }
   }
 
+  // START HERE
   return (
     <div>
       <h1 className="text-lg font-medium text-center px-2">
@@ -141,6 +163,7 @@ export default function OTPComponent(props: { email: string }) {
             maxLength={1}
             onInput={handleInput}
             name="one"
+            defaultValue={inputValues.one}
           />
           <Input
             className="w-12 h-12 text-center"

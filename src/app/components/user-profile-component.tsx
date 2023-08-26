@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
+import { useContext } from "react";
+import { UserContext } from "./UserContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +25,9 @@ export default function UserProfileComponent({
   const router = useRouter();
   const { toast } = useToast();
 
+  // context
+  const { ...data } = useContext(UserContext);
+
   /**
    * Logs out the user by making a request to the "/api/logout" endpoint.
    *
@@ -33,6 +38,7 @@ export default function UserProfileComponent({
 
     //? client side redirection to home page & manually refreshing
     setTimeout(() => {
+      data.setUser({}); // remove token & email
       router.push("/");
       router.refresh();
     }, 1500);

@@ -5,14 +5,12 @@ import { Label } from "@/app/components/ui/label";
 import { Textarea } from "@/app/components/ui/textarea";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { Headphones, Play } from "lucide-react";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useToast } from "@/app/components/ui/use-toast";
+import { UserContext } from "@/app/components/UserContext";
 
-const APIEndpoint =
-  process.env["API_ENDPOINT_ENV"] === "DEV"
-    ? "http://localhost:8000/full"
-    : "/full";
-console.log(APIEndpoint); //! DEBUG
+const baseApiUrl = process.env["NEXT_PUBLIC_API_URL"];
+// console.log(baseApiUrl); //! DEBUG
 
 /**
  * Renders a chat component.
@@ -22,8 +20,11 @@ console.log(APIEndpoint); //! DEBUG
  * @return {JSX.Element} - The rendered chat component.
  */
 export default function Chat({ params }: { params: { id: string } }) {
-  const { toast } = useToast();
   const id = params.id;
+  const { toast } = useToast();
+  // get data from context
+  const { ...data } = useContext(UserContext);
+  // console.log(data.user); //! DEBUG
   const [message, setMessage] = useState("");
   const [messagesList, setMessagesList] = useState<
     Array<{ prompt: string; reply: string }>
@@ -46,18 +47,24 @@ export default function Chat({ params }: { params: { id: string } }) {
     setSendButtonLoading(<LoadingSendButton />); // set send button to loading state
     const form = new FormData();
     let user_prompt = prompt;
-    let voice_choice = "en-US-Studio-O";
-    console.log(user_prompt); //! DEBUG
+    // let voice_choice = "en-US-Studio-O"; //! UNUSED
+    // console.log(user_prompt); //! DEBUG
+    console.log(data.user.voicePreference); //! DEBUG
     form.append("user_content", user_prompt);
-    form.append("voice_choice", voice_choice);
+    form.append(
+      "voice_choice",
+      data.user.voicePreference?.toString() as string,
+    );
+    form.append("email_address", data.user.email?.toString() as string);
+    form.append("token", data.user.token?.toString() as string);
     try {
-      const response = await fetch("http://localhost:8000/full", {
+      const response = await fetch(`${baseApiUrl}/chatgpt-text-voice`, {
         method: "POST",
         body: form,
       });
 
       const result = await response.json();
-      console.log(result); //! DEBUG
+      // console.log(result); //! DEBUG
       if (result) {
         const newMessage = {
           prompt: prompt,
@@ -137,7 +144,7 @@ export default function Chat({ params }: { params: { id: string } }) {
     e.preventDefault();
 
     const prompt = (e.target as HTMLFormElement).userPrompt.value;
-    console.log("Prompt: ", prompt); //! DEBUG
+    // console.log("Prompt: ", prompt); //! DEBUG
     if (prompt !== "") {
       handleSubmit(prompt);
       // console.log("Not empty") //! DEBUG
@@ -155,9 +162,9 @@ export default function Chat({ params }: { params: { id: string } }) {
   return (
     <div className="mb-0 space-y-10 px-1">
       {/* Chat ID: {id} */}
-      <div className="text-red-600 font-extrabold animate-pulse text-2xl border-8 border-blue-600 p-2 rounded-full">
+      {/* <div className="text-red-600 font-extrabold animate-pulse text-2xl border-8 border-blue-600 p-2 rounded-full">
         Only visible on hard navigation
-      </div>
+      </div> */}
       {/* REPLY */}
       <div className="border h-4/5 p-0 min-h-[65vh] rounded-sm mt-8">
         {messagesList.length > 0 ? (

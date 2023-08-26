@@ -8,6 +8,8 @@ import OTPComponent from "@/app/components/otp-component";
 import { useState } from "react";
 import Link from "next/link";
 
+const baseApiUrl = process.env["NEXT_PUBLIC_API_URL"];
+
 export default function Signup() {
   const { toast } = useToast();
   const [emailEntered, setEmailEntered] = useState<boolean>(false);
@@ -29,7 +31,7 @@ export default function Signup() {
     // send authentication code
     const form = new FormData();
     form.append("email_address", emailAddress);
-    const result = await fetch("http://localhost:8000/new-user", {
+    const result = await fetch(`${baseApiUrl}/new-user`, {
       method: "PUT",
       body: form,
     });
