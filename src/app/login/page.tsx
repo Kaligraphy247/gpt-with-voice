@@ -8,6 +8,8 @@ import Link from "next/link";
 import OTPComponent from "@/app/components/otp-component";
 import { useToast } from "@/app/components/ui/use-toast";
 
+const baseApiUrl = process.env["NEXT_PUBLIC_API_URL"];
+
 export default function Login() {
   const { toast } = useToast();
   const [emailEntered, setEmailEntered] = useState<boolean>(false);
@@ -29,7 +31,7 @@ export default function Login() {
     // send authentication code
     const form = new FormData();
     form.append("email_address", emailAddress);
-    const result = await fetch("http://localhost:8000/auth-by-email", {
+    const result = await fetch(`${baseApiUrl}/auth-by-email`, {
       method: "POST",
       body: form,
     });
