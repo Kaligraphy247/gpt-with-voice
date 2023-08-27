@@ -116,7 +116,7 @@ const EmailNotSentDescription = (): JSX.Element => {
     <div>
       <p>Please make sure you entered a valid email.</p>
       <br />
-      <p>If you don't have an account, please sign up instead.</p>
+      <p>{"If you don't have an account, please sign up instead."}</p>
     </div>
   );
 };
