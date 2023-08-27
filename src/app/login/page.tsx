@@ -7,6 +7,7 @@ import { useState } from "react";
 import Link from "next/link";
 import OTPComponent from "@/app/components/otp-component";
 import { useToast } from "@/app/components/ui/use-toast";
+import { ToastAction } from "@/app/components/ui/toast";
 
 const baseApiUrl = process.env["NEXT_PUBLIC_API_URL"];
 
@@ -31,7 +32,7 @@ export default function Login() {
     // send authentication code
     const form = new FormData();
     form.append("email_address", emailAddress);
-    const result = await fetch(`${baseApiUrl}/auth-by-email`, {
+    const result = await fetch(`${baseApiUrl}/send-auth-code`, {
       method: "POST",
       body: form,
     });
@@ -44,8 +45,17 @@ export default function Login() {
         title: "Authentication code sent!",
         description: "Please check your email for the authentication code.",
       });
+    } else {
+      toast({
+        title: "Code was not sent ❌",
+        description: <EmailNotSentDescription />,
+        variant: "destructive",
+        action: <EmailNotSentAction />,
+      });
     }
   };
+
+  // ? START
   return (
     <div className="flex flex-col space-y-16 border shadow-md p-2 rounded-md my-20 last:pb-4">
       <div>
@@ -92,3 +102,37 @@ export default function Login() {
     </div>
   );
 }
+
+/**
+ * This component renders the description of the error that occurs when email was not sent.
+ *
+ * It is strictly for a toast message. It is not used anywhere else.
+ *
+ * For cleaner code.
+ * @returns {JSX.Element}
+ */
+const EmailNotSentDescription = (): JSX.Element => {
+  return (
+    <div>
+      <p>Please make sure you entered a valid email.</p>
+      <br />
+      <p>If you don't have an account, please sign up instead.</p>
+    </div>
+  );
+};
+
+/**
+ * This component renders the Toast action that can be done when an error occurs.
+ *
+ * It is strictly for a toast message. It is not used anywhere else.
+ *
+ * For cleaner code.
+ * @returns {JSX.Element}
+ */
+const EmailNotSentAction = (): JSX.Element => {
+  return (
+    <ToastAction altText="Sign up">
+      <Link href={"/signup"}>Sign up</Link>
+    </ToastAction>
+  );
+};
