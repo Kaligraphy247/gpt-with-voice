@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CornerDownLeft, Command, Info } from "lucide-react";
 // import SidebarAndMainContent from "./components/side-and-main";
 
 export default async function Home() {
@@ -7,33 +8,104 @@ export default async function Home() {
   return (
     // <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <div>
-      <div className="flex flex-col items-center justify-center p-4 border mt-2 mb-4">
-        GPT with Voice
-      </div>
+      <Description />
+      <LandingPage />
+      <OtherInfo />
+    </div>
+  );
+}
 
-      {/* //todo : Separate this into a separate component */}
-      <div className="border-0 bg flex">
-        {/* SideBar */}
-        <div className="hidden md:w-3/5 md:flex 2xl:w-1/4 xl:w-1/3 bg-gray-950 border mr-6 px-2 py-1 rounded h-[90vh]">
-          <ul className="w-full space-y-4 py-4">
-            <li className="w-full border p-2 rounded-md">
-              <Link href={"/chat/42"}>content 1</Link>
-            </li>
-            <li className="w-full border p-2 rounded-md">
-              <Link href={"/chat/69"}>content 1</Link>
-            </li>
-            <li className="w-full border p-2 rounded-md">
-              <Link href={"/chat/another"}>content 1</Link>
-            </li>
-          </ul>
-        </div>
-        {/* MainBar */}
-        <div className="border w-full bg-gray-800 px-2 py-1 rounded">
-          main content
-        </div>
+function Description() {
+  return (
+    <div className="my-8 py-4">
+      <h1 className="text-3xl font-bold text-center py-4">
+        ChatGPT with Voice
+      </h1>
+      <h2 className="text-2xl font-bold mb-2">Description</h2>
+      <div>
+        <p className="indent-8">
+          {`ChatGPT with Voice is a web app that lets you listen to your prompt reply. `}
+          It uses{" "}
+          <Link
+            href={"https://cloud.google.com/text-to-speech"}
+            className="text-blue-600"
+            target="_blank"
+          >
+            {"Google's Text to Speech API "}
+          </Link>
+          to convert the result of your prompt into an audio format.
+        </p>
       </div>
     </div>
   );
 }
 
-// create a component with sidebar and main content
+function LandingPage() {
+  return (
+    <div className="my-8 py-4">
+      <h2 className="text-2xl font-bold mb-2">Getting started</h2>
+      <ul className="list-inside space-y-3">
+        <li className="list-disc">
+          <Link href={"/signup"} className="text-blue-600">
+            {"Sign up "}
+          </Link>
+          {"if you don't have an account, else"}
+          <Link href={"/login"} className="text-blue-600">
+            {" Login."}
+          </Link>
+        </li>
+        <li className="list-disc">
+          Go to
+          <Link href={"/chats"} className="text-blue-600">
+            {" Chats."}
+          </Link>
+        </li>
+        <li className="list-disc">
+          Write prompt - click the <span>Send</span> button to send.
+        </li>
+      </ul>
+      {/* info */}
+      <div className="text-muted-foreground flex my-2">
+        <Info size={16} className="mt-1 mr-1" />
+        <p>{"You can also use keyboard shortcuts like "}</p>
+        <kbd className="border-2 rounded-md shadow-md dark:shadow-md dark:shadow-neutral-900 p-0.5 flex w-fit ml-1">
+          ctrl&nbsp;+&nbsp;
+          <CornerDownLeft size={20} />
+        </kbd>
+        &nbsp;or&nbsp;
+        <kbd className="border-2 rounded-md shadow-md dark:shadow-md dark:shadow-neutral-900 p-0.5 flex w-fit ml-1">
+          <Command size={20} />
+          &nbsp;+&nbsp;
+          <CornerDownLeft size={20} />
+        </kbd>
+      </div>
+    </div>
+  );
+}
+
+function OtherInfo() {
+  return (
+    <div className="">
+      <h2 className="text-xl font-bold pb-1">
+        {"The app is functional however the most setting does't work, like:"}
+      </h2>
+      <ul className="list-disc list-inside space-y-2">
+        <li>OpenAI secret is not functional.</li>
+        <li>
+          Switching Voices is not functional: the default voice is set and
+          changing it does not do anything. You can always play the sample
+          voices.
+        </li>
+        <li>
+          Chat history does not persist between sessions, reloading the page
+          clears the history. Pick a dummy chat option and proceed!
+        </li>
+        <li>
+          {
+            "Prompt reply is limited to a single paragraph. It's better for performance."
+          }
+        </li>
+      </ul>
+    </div>
+  );
+}
