@@ -11,8 +11,6 @@ import { useContext } from "react";
 import { UserContext } from "./UserContext";
 import { json } from "stream/consumers";
 
-const baseApiUrl = process.env["NEXT_PUBLIC_API_URL"];
-
 export default function OTPComponent(props: { email: string }) {
   // destructure email from props
   const { email } = props;
@@ -62,7 +60,7 @@ export default function OTPComponent(props: { email: string }) {
   async function resendAuthenticationCode() {
     const form = new FormData();
     form.append("email_address", email);
-    const result = await fetch(`${baseApiUrl}/auth-by-email`, {
+    const result = await fetch(`/api/request-auth-code`, {
       method: "POST",
       body: form,
     });
@@ -97,8 +95,7 @@ export default function OTPComponent(props: { email: string }) {
       // send request
       try {
         const result = await fetch(`/api/authenticate`, {
-        // const result = await fetch(`${baseApiUrl}/confirm-auth-code`, {
-        method: "POST",
+          method: "POST",
           body: form,
           credentials: "include",
         });

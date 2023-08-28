@@ -1,8 +1,9 @@
 import CollapsibleSidebar from "./collapsible-sidebar";
+import { wait } from "../components/wait";
 
 export default async function Chats() {
   // test loading animation
-  // await new Promise((resolve) => setTimeout(resolve, 40_000));
+  // await wait(4_000);
   return (
     <>
       <CollapsibleSidebar />

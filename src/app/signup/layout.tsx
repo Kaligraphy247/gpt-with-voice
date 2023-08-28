@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: "Sign up to get started",
 };
 
-export default function SignUpLayout({
+export default async function SignUpLayout({
   children,
 }: {
   children: React.ReactNode;

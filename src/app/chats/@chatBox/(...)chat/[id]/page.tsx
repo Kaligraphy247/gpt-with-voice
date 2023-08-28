@@ -9,9 +9,6 @@ import { useState, useContext, useEffect } from "react";
 import { useToast } from "@/app/components/ui/use-toast";
 import { UserContext } from "@/app/components/UserContext";
 
-const baseApiUrl = process.env["NEXT_PUBLIC_API_URL"];
-// console.log(baseApiUrl); //! DEBUG
-
 /**
  * Renders a chat component.
  *
@@ -58,7 +55,7 @@ export default function Chat({ params }: { params: { id: string } }) {
     form.append("email_address", data.user.email?.toString() as string);
     form.append("token", data.user.token?.toString() as string);
     try {
-      const response = await fetch(`${baseApiUrl}/chatgpt-text-voice`, {
+      const response = await fetch(`/api/send-prompt`, {
         method: "POST",
         body: form,
       });

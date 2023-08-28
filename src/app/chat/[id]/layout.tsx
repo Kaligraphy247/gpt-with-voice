@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: "Chat description",
 };
 
-export default function ChatLayout({
+export default async function ChatLayout({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;
