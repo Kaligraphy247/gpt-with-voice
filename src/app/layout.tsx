@@ -13,7 +13,7 @@ const openSans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "GPT with Voice",
-  description: "Add voice capabilities to chatGPT",
+  description: "Adding voice capabilities to chatGPT",
 };
 
 export default function RootLayout({

@@ -7,7 +7,7 @@ export default async function Home() {
   // const value = Math.random();
   return (
     // <main className="flex min-h-screen flex-col items-center justify-between p-24">
-    <div>
+    <div className="my-20">
       <Description />
       <LandingPage />
       <OtherInfo />
@@ -17,7 +17,7 @@ export default async function Home() {
 
 function Description() {
   return (
-    <div className="my-8 py-4">
+    <div className="py-0">
       <h1 className="text-3xl font-bold text-center py-4">
         ChatGPT with Voice
       </h1>
@@ -65,20 +65,12 @@ function LandingPage() {
         </li>
       </ul>
       {/* info */}
-      <div className="text-muted-foreground flex my-2">
+      {/* <div className="text-muted-foreground flex my-2">
         <Info size={16} className="mt-1 mr-1" />
         <p>{"You can also use keyboard shortcuts like "}</p>
-        <kbd className="border-2 rounded-md shadow-md dark:shadow-md dark:shadow-neutral-900 p-0.5 flex w-fit ml-1">
-          ctrl&nbsp;+&nbsp;
-          <CornerDownLeft size={20} />
-        </kbd>
-        &nbsp;or&nbsp;
-        <kbd className="border-2 rounded-md shadow-md dark:shadow-md dark:shadow-neutral-900 p-0.5 flex w-fit ml-1">
-          <Command size={20} />
-          &nbsp;+&nbsp;
-          <CornerDownLeft size={20} />
-        </kbd>
-      </div>
+        <kbd className="px-0.5 sm:px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Shift</kbd>+
+        <kbd className="px-0.5 sm:px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500"><CornerDownLeft size={20}/></kbd>
+      </div> */}
     </div>
   );
 }

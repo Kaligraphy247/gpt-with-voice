@@ -32,7 +32,8 @@ export default function Login() {
     // send authentication code
     const form = new FormData();
     form.append("email_address", emailAddress);
-    const result = await fetch(`${baseApiUrl}/send-auth-code`, {
+    const result = await fetch(`/api/request-auth-code`, {
+    // const result = await fetch(`${baseApiUrl}/send-auth-code`, {
       method: "POST",
       body: form,
     });

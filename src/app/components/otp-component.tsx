@@ -96,8 +96,9 @@ export default function OTPComponent(props: { email: string }) {
       form.append("email_address", email);
       // send request
       try {
-        const result = await fetch(`${baseApiUrl}/confirm-auth-code`, {
-          method: "POST",
+        const result = await fetch(`/api/authenticate`, {
+        // const result = await fetch(`${baseApiUrl}/confirm-auth-code`, {
+        method: "POST",
           body: form,
           credentials: "include",
         });

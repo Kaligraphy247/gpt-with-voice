@@ -15,7 +15,7 @@ export default function AppBar() {
   return (
     <nav className="flex justify-between rounded border px-3 py-4">
       <Link href={"/"}>
-        <h2 className="pt-2 text-2xl font-semibold">GPT with Voice</h2>
+        <h2 className="pt-2 text-2xl font-semibold">ChatGPT with Voice</h2>
       </Link>
       <div className="flex space-x-4">
         <ToggleDarkMode />
