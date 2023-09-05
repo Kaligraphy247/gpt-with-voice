@@ -90,7 +90,7 @@ function OtherInfo() {
         </li>
         <li className="font-bold">
           Chat history is saved on your device and is cleared upon logout. If
-          you notice a performance issues, please logout or start a new chat.
+          you notice performance issues, please logout or start a new chat.
         </li>
         <li>
           {
