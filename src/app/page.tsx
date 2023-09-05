@@ -88,9 +88,9 @@ function OtherInfo() {
           changing it does not do anything. You can always play the sample
           voices.
         </li>
-        <li>
-          Chat history does not persist between sessions, reloading the page
-          clears the history. Pick a dummy chat option and proceed!
+        <li className="font-bold">
+          Chat history is saved on your device and is cleared upon logout. If
+          you notice a performance issues, please logout or start a new chat.
         </li>
         <li>
           {

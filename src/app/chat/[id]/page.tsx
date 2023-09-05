@@ -1,13 +1,14 @@
 "use client";
 
 import { Button } from "@/app/components/ui/button";
-import { Label } from "@/app/components/ui/label";
 import { Textarea } from "@/app/components/ui/textarea";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
-import { Headphones, Play } from "lucide-react";
 import { useState, useContext, useEffect } from "react";
 import { useToast } from "@/app/components/ui/use-toast";
 import { UserContext } from "@/app/components/UserContext";
+import Image from "next/image";
+import Messages, { MessageListProps } from "@/app/components/messages";
+import PromptLogin from "@/app/components/prompt-user-login/prompt-user-login";
 
 /**
  * Renders a chat component.
@@ -22,15 +23,29 @@ export default function Chat({ params }: { params: { id: string } }) {
   // get data from context
   const { ...data } = useContext(UserContext);
   // console.log(data.user); //! DEBUG
-  const [message, setMessage] = useState("");
-  const [messagesList, setMessagesList] = useState<
-    Array<{ prompt: string; reply: string }>
-  >([]);
+  const [messagesList, setMessagesList] = useState<MessageListProps>([]);
   const [audioUrl, setAudioUrl] = useState<string | undefined>();
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   const [sendButtonLoading, setSendButtonLoading] = useState(
     <DefaultSendButton />,
   );
+
+  // get existing messages, if any.
+  useEffect(() => {
+    const messageHistory =
+      typeof window !== "undefined" && window.localStorage.getItem("messages");
+    if (messageHistory) {
+      setMessagesList(JSON.parse(messageHistory));
+    } else {
+      window.localStorage.setItem("messages", JSON.stringify([]));
+    }
+  }, []);
+
+  // Once messageList is updated, save it to local storage
+  useEffect(() => {
+    typeof window !== "undefined" &&
+      window.localStorage.setItem("messages", JSON.stringify(messagesList));
+  }, [messagesList]);
 
   /**
    * Handles the submission of the form.
@@ -46,7 +61,7 @@ export default function Chat({ params }: { params: { id: string } }) {
     let user_prompt = prompt;
     // let voice_choice = "en-US-Studio-O"; //! UNUSED
     // console.log(user_prompt); //! DEBUG
-    console.log(data.user.voicePreference); //! DEBUG
+    // console.log(data.user.voicePreference); //! DEBUG
     form.append("user_content", user_prompt);
     form.append(
       "voice_choice",
@@ -63,7 +78,11 @@ export default function Chat({ params }: { params: { id: string } }) {
       const result = await response.json();
       // console.log(result); //! DEBUG
       if (result) {
-        const newMessage = {
+        const newMessage: {
+          prompt: string;
+          reply: string;
+          audioUrl?: string | undefined;
+        } = {
           prompt: prompt,
           reply: result.message.content,
         };
@@ -76,16 +95,20 @@ export default function Chat({ params }: { params: { id: string } }) {
           const dataURI = event.target!.result;
           if (typeof dataURI === "string") {
             setAudioUrl(dataURI);
+            // add audio src (dataURI) newMessage. Will be used to save in local storage.
+            newMessage.audioUrl = dataURI;
+            console.log(newMessage); //! DEBUG
+
+            // update the state (an array of messages)
+            setMessagesList((prevMessagesList) => [
+              ...prevMessagesList,
+              newMessage,
+            ]);
           }
           setIsAudioLoading(false);
         };
         fileReader.readAsDataURL(audioBlob);
 
-        // update the state (an array of messages)
-        setMessagesList((prevMessagesList) => [
-          ...prevMessagesList,
-          newMessage,
-        ]);
         // todo upload message to chat history db
 
         // set loading state back to default
@@ -158,77 +181,51 @@ export default function Chat({ params }: { params: { id: string } }) {
 
   return (
     <div className="mb-0 space-y-10 px-1">
-      {/* Chat ID: {id} */}
-      {/* <div className="text-red-600 font-extrabold animate-pulse text-2xl border-8 border-blue-600 p-2 rounded-full">
-        Only visible on hard navigation
-      </div> */}
-      {/* REPLY */}
-      <div className="border h-4/5 p-0 min-h-[65vh] rounded-sm mt-8">
-        {messagesList.length > 0 ? (
-          <div className="grid w-full gap-1.5 mb-0">
-            <div className="relative w-full">
-              <ul className="border-0 space-y-16 p-4 rounded-sm pb-20 selection:bg-blue-600 selection:text-white dark:selection:bg-blue-700">
-                {messagesList.map((message, index) => (
-                  <li className="w-full" key={index}>
-                    <p className="mb-2 ml-0.5 overflow-auto opacity-75 pl-2 py-1 rounded bg-neutral-100 dark:bg-neutral-900">
-                      {message.prompt}
-                    </p>
-                    <div className="w-full border rounded-lg p-2 min-h-[64px] shadow-lg shadow-accent dark:shadow dark:shadow-neutral-900 text-[0.95rem]">
-                      {message.reply}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              {/* // TODO AUDIO IS LOADED */}
-              {!isAudioLoading ? (
-                <div className="absolute bottom-2 right-2 px-2 pt-3">
-                  <audio
-                    controls
-                    controlsList="nodownload"
-                    key={audioUrl}
-                    autoPlay
-                  >
-                    <source src={audioUrl} />
-                  </audio>
-                </div>
-              ) : (
-                <div className="absolute bottom-2 right-2 px-2 pt-3">
-                  <div className="border rounded-lg px-10 py-2 animate-pulse">
-                    <Play />
-                  </div>
-                </div>
-              )}
-            </div>
+      {data.user.email !== undefined ? (
+        <>
+          {/* Chat ID: {id} */}
+          {/* REPLY */}
+          <Messages messages={messagesList} isAudioLoading={isAudioLoading} />
+          {/* PROMPT */}
+          <div className="border-0 h-1/5 p-0">
+            <form
+              className="relative h-full w-full"
+              onSubmit={handleSendButtonSubmit}
+            >
+              <Textarea
+                className="block h-full w-full resize-none rounded-md border-2 p-2 pr-10"
+                placeholder="Ask your question here."
+                rows={8}
+                name="userPrompt"
+                onKeyDown={handleKeyDown}
+              />
+              {sendButtonLoading}
+            </form>
           </div>
-        ) : (
-          <>
-            <div className="flex h-[65vh] justify-center items-center">
-              <div className="border justify-center items-center flex p-4 rounded-lg border-dashed border-gray-300 text-gray-600 dark:border-gray-500 text-center dark:text-gray-300">
-                {"No chat's yet 🤷"}
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-      {/* PROMPT */}
-      <div className="border-0 h-1/5 p-0">
-        <form
-          className="relative h-full w-full"
-          onSubmit={handleSendButtonSubmit}
-        >
-          <Textarea
-            className="block h-full w-full resize-none rounded-md border-2 p-2 pr-10"
-            placeholder="Ask your question here."
-            rows={8}
-            name="userPrompt"
-            onKeyDown={handleKeyDown}
-          />
-          {sendButtonLoading}
-        </form>
-      </div>
+        </>
+      ) : (
+        <PromptLogin />
+      )}
     </div>
   );
 }
+
+/**
+ * Renders a loading indicator for audio replies.
+ *
+ * @return {React.ReactNode} The loading indicator component.
+ */
+const ReplyLoading: React.FC = () => {
+  return (
+    <Image
+      src="/audio-loading.svg"
+      alt=""
+      className="dark:invert"
+      width={64}
+      height={64}
+    />
+  );
+};
 
 /**
  * Renders a default send button component.

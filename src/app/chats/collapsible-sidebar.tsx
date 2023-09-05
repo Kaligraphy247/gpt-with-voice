@@ -30,14 +30,14 @@ export default function CollapsibleSidebar() {
         <div className="border-0 overflow-y-auto">
           <ul className="w-full space-y-4 py-4">
             <li className="w-full border p-2 rounded-md">
-              <Link href={"/chat/42"}>content 42</Link>
+              <Link href={"/chat/new"}>New</Link>
             </li>
             {/* <li className="w-full border p-2 rounded-md">
               <Link href={"/chat/69"}>content 69</Link>
             </li> */}
-            <li className="w-full border p-2 rounded-md">
+            {/* <li className="w-full border p-2 rounded-md">
               <Link href={"/chat/another"}>content another</Link>
-            </li>
+            </li> */}
           </ul>
         </div>
         <SheetFooter>

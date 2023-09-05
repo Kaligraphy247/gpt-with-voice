@@ -39,6 +39,8 @@ export default function UserProfileComponent({
     //? client side redirection to home page & manually refreshing
     setTimeout(() => {
       data.setUser({}); // remove token & email
+      typeof window !== "undefined" &&
+        window.localStorage.removeItem("messages"); // remove messages from local storage
       router.push("/");
       router.refresh();
     }, 1500);
