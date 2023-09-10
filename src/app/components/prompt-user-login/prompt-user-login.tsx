@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/app/components/ui/dialog";
+} from "@/app/components/prompt-user-login/dialog";
 /**
  * Prompt user to login.
  */
