@@ -1,7 +1,6 @@
 "use client";
 
-import { Info } from "lucide-react";
-import Link from "next/link";
+import { Info, Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useToast } from "./ui/use-toast";
@@ -9,7 +8,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
-import { json } from "stream/consumers";
 
 export default function OTPComponent(props: { email: string }) {
   // destructure email from props
@@ -18,7 +16,8 @@ export default function OTPComponent(props: { email: string }) {
   const { toast } = useToast();
   const router = useRouter();
   const [isAuthCodeEmpty, setIsAuthCodeEmpty] = useState<boolean>(true);
-  const [inputValues, setInputValues] = useState({
+  const [showLoadingSpinner, setShowLoadingSpinner] = useState<boolean>(true);
+  const [inputValues, _setInputValues] = useState({
     one: "",
     two: "",
     three: "",
@@ -75,6 +74,7 @@ export default function OTPComponent(props: { email: string }) {
 
   async function login(e: any) {
     e.preventDefault();
+    setShowLoadingSpinner(false);
     console.log("login"); //! DEBUG
     const code =
       e.target.one.value +
@@ -104,6 +104,7 @@ export default function OTPComponent(props: { email: string }) {
         console.log(response);
 
         if (response["access_token"]) {
+          setShowLoadingSpinner(true);
           toast({
             title: "Authentication Successful",
             description: "Welcome 🎉",
@@ -207,15 +208,16 @@ export default function OTPComponent(props: { email: string }) {
           </p>
         </div>
         <div className="flex justify-center mt-4">
-          {isAuthCodeEmpty ? (
-            <Button type="submit" className="w-32 h-12" disabled>
-              Login
-            </Button>
-          ) : (
-            <Button type="submit" className="w-32 h-12">
-              Login
-            </Button>
-          )}
+          <Button
+            type="submit"
+            className="w-32 h-12"
+            disabled={isAuthCodeEmpty}
+          >
+            <div hidden={showLoadingSpinner}>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            </div>
+            Login
+          </Button>
         </div>
       </form>
       <div className="my-4 flex flex-col justify-center items-center">

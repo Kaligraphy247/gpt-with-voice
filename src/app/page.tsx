@@ -64,13 +64,6 @@ function LandingPage() {
           Write prompt - click the <span>Send</span> button to send.
         </li>
       </ul>
-      {/* info */}
-      {/* <div className="text-muted-foreground flex my-2">
-        <Info size={16} className="mt-1 mr-1" />
-        <p>{"You can also use keyboard shortcuts like "}</p>
-        <kbd className="px-0.5 sm:px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">Shift</kbd>+
-        <kbd className="px-0.5 sm:px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500"><CornerDownLeft size={20}/></kbd>
-      </div> */}
     </div>
   );
 }
@@ -79,7 +72,7 @@ function OtherInfo() {
   return (
     <div className="">
       <h2 className="text-xl font-bold pb-1">
-        {"The app is functional however the most setting does't work, like:"}
+        {"The app is functional however the most settings does't work, like:"}
       </h2>
       <ul className="list-disc list-inside space-y-2">
         <li>OpenAI secret is not functional.</li>
